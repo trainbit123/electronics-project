@@ -30,6 +30,7 @@ function Card({ product }) {
   const wished = inWishlist(product.id)
 
   const handleAddToCart = (e) => {
+    e.preventDefault()
     e.stopPropagation()
     addToCart(product)
     setAdded(true)
@@ -37,6 +38,7 @@ function Card({ product }) {
   }
 
   const handleWishlist = (e) => {
+    e.preventDefault()
     e.stopPropagation()
     toggleWishlist(product)
   }
