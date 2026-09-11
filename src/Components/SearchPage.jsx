@@ -98,6 +98,10 @@ function SearchPage() {
           }
         }
 
+        // Filter: only electronics categories (TechMatch is an electronics store)
+        const ELECTRONICS = ["smartphones", "laptops", "tablets", "mobile-accessories"]
+        merged = merged.filter(p => ELECTRONICS.includes(p.category))
+
         // Step 3: Apply AI filters
         if (intent.maxPrice != null) {
           merged = merged.filter(p => p.price <= intent.maxPrice)

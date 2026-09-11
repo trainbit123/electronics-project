@@ -13,6 +13,7 @@ import SearchPage from "./Components/SearchPage"
 import CartPage from "./Components/CartPage"
 import MyOrdersPage from "./Components/MyOrdersPage"
 import ProductPage from "./Components/ProductPage"
+import WishlistPage from "./Components/WishlistPage"
 
 function ComingSoon({ label }) {
   return (
@@ -37,6 +38,7 @@ function App() {
               <Route path="/all-products" element={<AllProductsPage />} />
               <Route path="/search"       element={<SearchPage />} />
               <Route path="/cart"         element={<CartPage />} />
+              <Route path="/wishlist"     element={<WishlistPage />} />
               <Route path="/my-orders"    element={<MyOrdersPage />} />
               <Route path="/mobiles"      element={<MobilesPage />} />
               <Route path="/laptops"      element={<LaptopsPage />} />

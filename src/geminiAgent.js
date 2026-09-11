@@ -39,11 +39,28 @@ Other rules:
 - "suggestions" should be 2-3 related product searches the user might also like. Keep them short (1-3 words).
 - Always provide a friendly "summary" of what you understood.`
 
+const STOP_WORDS = new Set([
+  "a","an","the","for","and","or","but","in","on","at","to","of","is","it",
+  "with","by","from","up","about","into","over","after","my","me","i","we",
+  "best","top","good","great","cheap","affordable","expensive","budget",
+  "students","student","professional","professionals","gaming","gamer",
+  "under","below","above","around","between","near",
+  "buy","buying","want","need","looking","find","search","show","get",
+  "lightweight","heavy","fast","slow","new","old","latest","popular",
+])
+
+function filterSearchWords(query) {
+  return query.split(/\s+/)
+    .filter(Boolean)
+    .filter(w => !STOP_WORDS.has(w.toLowerCase()))
+}
+
 export async function analyzeSearchQuery(userQuery) {
   // If no API key, return a basic fallback
   if (!GEMINI_API_KEY || GEMINI_API_KEY === "your_gemini_api_key_here") {
+    const terms = filterSearchWords(userQuery)
     return {
-      keywords: userQuery.split(/\s+/).filter(Boolean),
+      searchTerms: terms.length > 0 ? terms : userQuery.split(/\s+/).filter(Boolean),
       category: null,
       maxPrice: null,
       minPrice: null,
@@ -57,7 +74,7 @@ export async function analyzeSearchQuery(userQuery) {
 
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -90,8 +107,9 @@ export async function analyzeSearchQuery(userQuery) {
 }
 
 function fallback(query) {
+  const terms = filterSearchWords(query)
   return {
-    keywords: query.split(/\s+/).filter(Boolean),
+    searchTerms: terms.length > 0 ? terms : query.split(/\s+/).filter(Boolean),
     category: null,
     maxPrice: null,
     minPrice: null,
