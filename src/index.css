@@ -1,0 +1,33 @@
+﻿@import "tailwindcss";
+@plugin "daisyui";
+
+/* Global interactive cursor */
+button,
+[role="button"],
+select,
+label,
+a,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="button"],
+summary {
+  cursor: pointer;
+}
+
+/* Input text always black/visible */
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+  color: #111827;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
