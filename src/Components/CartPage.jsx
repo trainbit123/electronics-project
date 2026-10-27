@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useCart, useOrders } from "../StoreContext"
+import { useAuth } from "../AuthContext"
 
 /* ── Field — defined OUTSIDE modal so it never gets recreated on re-render ── */
 function Field({ name, label, placeholder, type = "text", value, onChange, error }) {
@@ -20,8 +21,8 @@ function Field({ name, label, placeholder, type = "text", value, onChange, error
 }
 
 /* ── Address Modal ── */
-function AddressModal({ total, onClose, onConfirm }) {
-  const [form, setForm] = useState({ name: "", phone: "", address: "", city: "", pincode: "" })
+function AddressModal({ total, defaultName = "", onClose, onConfirm }) {
+  const [form, setForm] = useState({ name: defaultName, phone: "", address: "", city: "", pincode: "" })
   const [errors, setErrors] = useState({})
 
   const validate = () => {
@@ -122,6 +123,7 @@ function OrderConfirmed({ address, onContinue }) {
 function CartPage() {
   const { cart, removeFromCart, updateQty, cartTotal } = useCart()
   const { placeOrder } = useOrders()
+  const { user, isAuthenticated, openAuthModal } = useAuth()
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
   const [confirmedAddress, setConfirmedAddress] = useState(null)
@@ -148,6 +150,22 @@ function CartPage() {
           </svg>
           <span className="text-gray-800 font-medium">Cart</span>
         </nav>
+
+        {/* Guest Banner */}
+        {!isAuthenticated && cart.length > 0 && (
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between gap-3 text-xs text-blue-900">
+            <div className="flex items-center gap-2">
+              <span className="text-base">🔐</span>
+              <span><strong>Sign in to TechMatch</strong> to securely sync your orders, addresses, and tracking to your account database.</span>
+            </div>
+            <button
+              onClick={() => openAuthModal("login")}
+              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shrink-0 transition-colors"
+            >
+              Sign In
+            </button>
+          </div>
+        )}
 
         <h1 className="text-xl font-bold text-gray-800 mb-5">
           My Cart <span className="text-sm font-normal text-gray-400">({cart.length} {cart.length === 1 ? "item" : "items"})</span>
@@ -254,6 +272,7 @@ function CartPage() {
       {showModal && (
         <AddressModal
           total={cartTotal}
+          defaultName={user?.name || ""}
           onClose={() => setShowModal(false)}
           onConfirm={handleConfirm}
         />

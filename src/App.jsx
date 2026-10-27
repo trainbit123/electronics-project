@@ -1,8 +1,10 @@
 import React from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { AuthProvider } from "./AuthContext"
 import { StoreProvider } from "./StoreContext"
 import Header from "./Header"
 import Footer from "./Footer"
+import AuthModal from "./Components/AuthModal"
 import Products from "./Products"
 import MobilesPage from "./Components/MobilesPage"
 import LaptopsPage from "./Components/LaptopsPage"
@@ -28,30 +30,33 @@ function ComingSoon({ label }) {
 function App() {
   return (
     <BrowserRouter>
-      <StoreProvider>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-1">
-            <Routes>
-              <Route path="/"             element={<Products />} />
-              <Route path="/product/:id"  element={<ProductPage />} />
-              <Route path="/all-products" element={<AllProductsPage />} />
-              <Route path="/search"       element={<SearchPage />} />
-              <Route path="/cart"         element={<CartPage />} />
-              <Route path="/wishlist"     element={<WishlistPage />} />
-              <Route path="/my-orders"    element={<MyOrdersPage />} />
-              <Route path="/mobiles"      element={<MobilesPage />} />
-              <Route path="/laptops"      element={<LaptopsPage />} />
-              <Route path="/tablets"      element={<TabletsPage />} />
-              <Route path="/accessories"  element={<AccessoriesPage />} />
-              <Route path="/smartwatches" element={<ComingSoon label="Smartwatches" />} />
-              <Route path="/gaming"       element={<ComingSoon label="Gaming" />} />
-              <Route path="/deals"        element={<ComingSoon label="Deals" />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </StoreProvider>
+      <AuthProvider>
+        <StoreProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1">
+              <Routes>
+                <Route path="/"             element={<Products />} />
+                <Route path="/product/:id"  element={<ProductPage />} />
+                <Route path="/all-products" element={<AllProductsPage />} />
+                <Route path="/search"       element={<SearchPage />} />
+                <Route path="/cart"         element={<CartPage />} />
+                <Route path="/wishlist"     element={<WishlistPage />} />
+                <Route path="/my-orders"    element={<MyOrdersPage />} />
+                <Route path="/mobiles"      element={<MobilesPage />} />
+                <Route path="/laptops"      element={<LaptopsPage />} />
+                <Route path="/tablets"      element={<TabletsPage />} />
+                <Route path="/accessories"  element={<AccessoriesPage />} />
+                <Route path="/smartwatches" element={<ComingSoon label="Smartwatches" />} />
+                <Route path="/gaming"       element={<ComingSoon label="Gaming" />} />
+                <Route path="/deals"        element={<ComingSoon label="Deals" />} />
+              </Routes>
+            </main>
+            <Footer />
+            <AuthModal />
+          </div>
+        </StoreProvider>
+      </AuthProvider>
     </BrowserRouter>
   )
 }
